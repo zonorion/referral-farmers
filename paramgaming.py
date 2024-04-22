@@ -1,5 +1,7 @@
 import asyncio
 import os
+import random
+
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -79,12 +81,14 @@ user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 
 
 class ParamGaming:
-    async def batching_signup(self, prefix, concurrency, from_number, to_number):
+    async def batching_signup(self, concurrency, from_number, to_number):
+        # TODO: add farmers
+        farmer_list = []
         farm_numbers = [i for i in range(from_number, to_number)]
         chunked_numbers = [farm_numbers[i:i + concurrency] for i in range(0, len(farm_numbers), concurrency)]
         for chunk in chunked_numbers:
             try:
-                tasks = [self.signup_param(f'{prefix}{i}', is_confirm=True, retry_time=0) for i in chunk]
+                tasks = [self.signup_param(f'{random.choice(farmer_list)}{i}', is_confirm=True, retry_time=0) for i in chunk]
                 await asyncio.gather(*tasks, return_exceptions=True)
             except:
                 pass

@@ -15,11 +15,9 @@ def print_hi(name):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     p = paramgaming.ParamGaming()
-    # init farmers
-    farmer_list = []
     loop = asyncio.get_event_loop()
     loop.run_until_complete(
-        p.batching_signup(random.choice(farmer_list), concurrency=3, from_number=240, to_number=2000)
+        p.batching_signup(concurrency=3, from_number=240, to_number=2000)
     )
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
