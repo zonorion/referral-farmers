@@ -8,10 +8,10 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 PROXY_FOLDER = os.path.join('extension', 'proxy')
-PROXY_HOST = "113.22.228.136"
-PROXY_PORT = "36254"
-PROXY_USER = "trungcong24133"
-PROXY_PASS = "24199412"
+PROXY_HOST = ""
+PROXY_PORT = ""
+PROXY_USER = ""
+PROXY_PASS = ""
 
 MAIL_DOMAIN = '@maildrop.cc'
 PARAM_REF_LINK = 'https://paramgaming.com/?referCode=B50AF67760#/signup'
