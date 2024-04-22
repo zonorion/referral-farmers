@@ -1,4 +1,5 @@
 # This is a sample Python script.
+import asyncio
 import random
 
 # Press ⌃R to execute it or replace it with your code.
@@ -16,6 +17,9 @@ if __name__ == '__main__':
     p = paramgaming.ParamGaming()
     # init farmers
     farmer_list = []
-    p.batching_signup(random.choice(farmer_list), from_number=30, to_number=2000)
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(
+        p.batching_signup(random.choice(farmer_list), concurrency=3, from_number=240, to_number=2000)
+    )
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

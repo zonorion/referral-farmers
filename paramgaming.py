@@ -1,5 +1,5 @@
+import asyncio
 import os
-import time
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -79,11 +79,17 @@ user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 
 
 class ParamGaming:
-    def batching_signup(self, prefix, from_number, to_number):
-        for i in range(from_number, to_number):
-            self.signup_param(f'{prefix}{i}', is_confirm=True, retry_time=0)
+    async def batching_signup(self, prefix, concurrency, from_number, to_number):
+        farm_numbers = [i for i in range(from_number, to_number)]
+        chunked_numbers = [farm_numbers[i:i + concurrency] for i in range(0, len(farm_numbers), concurrency)]
+        for chunk in chunked_numbers:
+            try:
+                tasks = [self.signup_param(f'{prefix}{i}', is_confirm=True, retry_time=0) for i in chunk]
+                await asyncio.gather(*tasks, return_exceptions=True)
+            except:
+                pass
 
-    def signup_param(self, username, is_confirm=True, retry_time=0):
+    async def signup_param(self, username, is_confirm=True, retry_time=0):
         print(f"Start {'confirm' if is_confirm else 'login'} to account {username}\n")
         mail = f'{username}{MAIL_DOMAIN}'
         mail_url = f'https://maildrop.cc/inbox/?mailbox={username}'
@@ -94,7 +100,7 @@ class ParamGaming:
         options.add_argument("--start-maximized")
         options.add_argument(f"--user-agent={user_agent}")
         # options.headless = False
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--no-sandbox")
         # options.add_argument(f"--load-extension={PROXY_FOLDER}")
@@ -102,34 +108,34 @@ class ParamGaming:
         driver = uc.Chrome(options=options)
         try:
             driver.get('https://nowsecure.nl')
-            time.sleep(5)
+            await asyncio.sleep(5)
             # driver.maximize_window()
             driver.get(PARAM_REF_LINK)
-            time.sleep(1)
+            await asyncio.sleep(1)
             driver.find_element(by=By.ID, value='email').click()
             driver.find_element(by=By.ID, value='email').send_keys(mail)
-            time.sleep(0.5)
+            await asyncio.sleep(0.5)
             driver.find_element(by=By.ID, value='password').click()
             driver.find_element(by=By.ID, value='password').send_keys(PARAM_PWD)
-            time.sleep(0.5)
+            await asyncio.sleep(0.5)
             driver.find_element(by=By.ID, value='cPassword').click()
             driver.find_element(by=By.ID, value='cPassword').send_keys(PARAM_PWD)
-            time.sleep(0.5)
+            await asyncio.sleep(0.5)
             driver.find_element(by=By.ID, value='disclaimer').click()
-            time.sleep(0.5)
+            await asyncio.sleep(0.5)
             driver.find_element(by=By.XPATH, value='//*[@id="root"]/main/div/div[3]/div/form/div[5]/button').click()
-            time.sleep(2)
+            await asyncio.sleep(2)
             driver.get(mail_url)
-            time.sleep(10)
-            # refresh_btn = WebDriverWait(driver, 5).until(EC.presence_of_element_located(
-            #     (By.XPATH, "//span[contains(text(), 'Refresh')]"))
-            # )
-            # refresh_btn.click()
+            await asyncio.sleep(5)
+            refresh_btn = WebDriverWait(driver, 5).until(EC.presence_of_element_located(
+                (By.XPATH, "//span[contains(text(), 'Refresh')]"))
+            )
+            refresh_btn.click()
             active_link = WebDriverWait(driver, 10).until(EC.presence_of_element_located(
                 (By.XPATH, "//div[2]/div/div[3][contains(., 'Activate')]"))
             )
             active_link.click()
-            time.sleep(5)
+            await asyncio.sleep(5)
             iframes = driver.find_elements(By.TAG_NAME, 'iframe')
             driver.switch_to.frame(iframes[0])
             confirm_url = WebDriverWait(driver, 1).until(
@@ -141,10 +147,11 @@ class ParamGaming:
             WebDriverWait(driver, 5).until(EC.presence_of_element_located(
                 (By.XPATH, "//h3[contains(., 'successfully')]"))
             )
+            print('Successfully confirmed')
         except Exception as e:
             print(e.message)
             pass
         finally:
-            # time.sleep(10)
+            # await asyncio.sleep(10)
             print('Closing driver\n')
             driver.quit()
