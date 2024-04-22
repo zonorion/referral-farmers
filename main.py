@@ -14,7 +14,8 @@ def print_hi(name):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
     p = paramgaming.ParamGaming()
-    farmer_list = ['zon-farmer', 'mewmew-farmer', 'halinh-farmer', 'hoangtung-farmer']
+    # init farmers
+    farmer_list = []
     p.batching_signup(random.choice(farmer_list), from_number=30, to_number=2000)
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
