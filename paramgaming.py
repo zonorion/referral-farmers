@@ -16,6 +16,7 @@ PROXY_PASS = "Zxcv123123"
 
 MAIL_DOMAIN = '@maildrop.cc'
 # PARAM_REF_LINK = 'https://paramgaming.com/?referCode=2DB4064178#/signup'
+# PARAM_REF_LINK = 'https://paramgaming.com/?referCode=64E821357F#/signup'
 PARAM_REF_LINK = 'https://paramgaming.com/?referCode=B50AF67760#/signup'
 PARAM_PWD = '123456789!@'
 
@@ -86,7 +87,8 @@ class ParamGaming:
     async def batching_signup(self, concurrency, from_number, to_number):
         # TODO: add farmers
         # farmer_list = ['z-meme', 'z-pepe', 'z-bobo', 'z-momo']
-        farmer_list = ['poopoo', 'booboo', 'moomoo', 'zoozoo', 'ziizii', 'piipii', 'tiitii']
+        # farmer_list = ['poopoo', 'booboo', 'moomoo', 'zoozoo', 'ziizii', 'piipii', 'tiitii']
+        farmer_list = ['zz-poopooz', 'zz-boobooz', 'zz-moomooz', 'zz-zoozooz', 'zz-ziiziiz', 'zz-piipiiz', 'zz-tiitiiz']
         farm_numbers = [i for i in range(from_number, to_number)]
         chunked_numbers = [farm_numbers[i:i + concurrency] for i in range(0, len(farm_numbers), concurrency)]
         for chunk in chunked_numbers:
